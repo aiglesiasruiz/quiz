@@ -1,0 +1,4 @@
+node_modules
+.DB_Store
+npm-debug.log
+quiz.sqlite

@@ -15,7 +15,7 @@ exports.search = function(req, res){
   models.Quiz.findAll({ where:['pregunta like ?', '%'+palabra+'%'] }).then(function(quizes) {
     //console.log('Este es el log %s',quizes[0].pregunta);
     res.render('quizes/index', {quizes: quizes});
-  });
+  })
         
 
  // models.Quiz.findAll({ where: ["id = ?", req.query.busqueda] }).then(function(quizes) {

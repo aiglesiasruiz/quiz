@@ -8,6 +8,17 @@ router.get('/', function(req, res) {
   res.render('index', { title: 'Quiz' });
 });
 
+/**router.get('/quizes',function(req,res) {
+    
+    if(typeof req.query.busqueda != "undefined") {
+        console.log("ENTRA EN IF");
+        quizController.search;
+    }
+    quizController.index;  
+
+});**/
+
+
 
 router.get('/quizes', quizController.index);
 router.get('/quizes/:quizId(\\d+)', quizController.show);

@@ -14,6 +14,23 @@ exports.load = function(req, res, next, quizId){
 };
 
 
+//POST /quizes/create
+exports.create = function(req, res){
+  var quiz = models.Quiz.build( req.body.quiz );
+  //guarda en DB los campos pregunta y respuesta
+  quiz.save({fields: ["pregunta", "respuesta"]}).then(function(){
+    res.redirect('/quizes');//redireccion a lista de preguntas
+  })
+};
+
+//GET /quizes/new
+exports.new = function(req, res){
+  var quiz = models.Quiz.build({pregunta: "Pregunta", respuesta:"Respuesta"});
+  res.render('quizes/new', {quiz: quiz});
+};
+
+
+
 //GET /quizes
 exports.index = function(req, res){  
   models.Quiz.findAll().then(function(quizes){

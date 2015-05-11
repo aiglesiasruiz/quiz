@@ -22,9 +22,10 @@ router.post('/quizes/create', quizController.create);
 router.get('/quizes/:quizId(\\d+)/edit', quizController.edit);
 router.put('/quizes/:quizId(\\d+)', quizController.update);
 
+router.delete('/quizes/:quizId(\\d+)', quizController.destroy);
 //Ruta de athor
 router.get('/author', function(req, res) {
-  res.render('author', { title: 'Autores' });
+  res.render('author', { title: 'Autores', errors: [] });
 });
 
 module.exports = router;

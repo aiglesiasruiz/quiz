@@ -7,6 +7,7 @@ var sessionController = require('../controllers/session_controller');
 
 var commentController = require('../controllers/comment_controller');
 
+var statisticsController = require('../controllers/statistics_controller');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -43,5 +44,10 @@ router.get('/logout', sessionController.destroy);
 router.get('/author', function(req, res) {
   res.render('author', { title: 'Autores', errors: [] });
 });
+
+//Ruta estadistica
+router.get('/quizes/statistics', statisticsController.load);
+  
+
 
 module.exports = router;

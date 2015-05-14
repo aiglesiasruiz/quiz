@@ -37,7 +37,7 @@ var Comment = sequelize.import(comment_path);
 Comment.belongsTo(Quiz);
 Quiz.hasMany(Comment);
 
-exports.Quiz = Quiz;//exportar definicion de tabala Quiz
+exports.Quiz = Quiz;//exportar definicion de tabla Quiz
 exports.Comment = Comment;
 
 

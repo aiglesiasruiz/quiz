@@ -38,7 +38,7 @@ Comment.belongsTo(Quiz);
 Quiz.hasMany(Comment);
 
 exports.Quiz = Quiz;//exportar definicion de tabla Quiz
-exports.Comment = Comment;
+exports.Comment = Comment;//Eportar def de tabla comment
 
 
 //sequelize.sync() crea e inicializa tabla de preguntasen DB 

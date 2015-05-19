@@ -49,8 +49,13 @@ app.use(function(req, res, next){
 
 //Helpers dinamicos
 app.use(function(req, res, next){
+
+    // si no existe lo inicializa
+    if (!req.session.redir) {
+        req.session.redir = '/';
+    }
     //guardar payh en sesion.redir para despues de login
-    if(!req.path.match(/\/login|\/logout/)) {
+    if(!req.path.match(/\/login|\/logout|\/user/)) {
         req.session.redir = req.path;
     }
     //hacer visible req.session en las vistas

@@ -62,8 +62,13 @@ exports.new = function(req, res){
 
 //GET /quizes
 exports.index = function(req, res){
+  var options = {};
+  if(req.user){
+    options.where = {UserId: req.user.id}
+  }
+  
   if(req.query.busqueda===undefined){
-    models.Quiz.findAll().then(
+    models.Quiz.findAll(options).then(
       function(quizes) {
       res.render('quizes/index.ejs', {quizes: quizes, errors: []});
      }).catch (function (error) { next(error)});

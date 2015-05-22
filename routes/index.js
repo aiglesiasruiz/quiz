@@ -13,6 +13,8 @@ var statisticsController = require('../controllers/statistics_controller');
 
 var userController = require('../controllers/user_controller');
 
+var favouriteController = require('../controllers/favourites_controller');
+
 /* GET home page. */
 router.get('/', function(req, res) {
   res.render('index', { title: 'Quiz', errors: [] });
@@ -51,6 +53,12 @@ router.get('/user/:userId(\\d+)/edit',  sessionController.loginRequired, userCon
 router.put('/user/:userId(\\d+)',  sessionController.loginRequired, userController.ownershipRequired, userController.update);     // actualizar información de cuenta
 router.delete('/user/:userId(\\d+)',  sessionController.loginRequired, userController.ownershipRequired, userController.destroy);     // borrar cuenta
 router.get('/user/:userId(\\d+)/quizes',  quizController.index);     // ver las preguntas de un usuario
+
+
+router.put('/user/:userId(\\d+)/favourites/:quizId(\\d+)', sessionController.loginRequired, favouriteController.create);//Marcar como favorito
+router.delete('/user/:userId(\\d+)/favourites/:quizId(\\d+)', sessionController.loginRequired, favouriteController.destroy);//Eliminar de favoritos
+router.get('/user/:userId(\\d+)/favourites', favouriteController.show); //ver las preguntas favoritas
+
 
 //Ruta de athor
 router.get('/author', function(req, res) {

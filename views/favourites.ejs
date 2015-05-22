@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<table>
+<% if(favs.length === 0){ %>
+	<p>No tiene preguntas favoritas</p>
+<% }else { 
+	 var i; for (i=0; i < favs.length ; i++) { %>
+    	<tr>
+     		<td><a href="/quizes/<%= favs[i].id %>"><%= favs[i].pregunta %></a></td>
+     		  <td>
+            <% for(var j=0; j<quizes.length; j++){
+
+                if(favs[i].id === quizes[j].id){ 
+                  var color = 'orange'; var method = "delete";var onClick = "return confirm('Quitar favorito:');";break; 
+                }    else { var color = 'grey'; var method = "put"; var onClick = ""; }
+              }%>
+
+            <form method="post" action="/user/<%= session.user.id %>/favourites/<%= quizes[i].id%>?_method=<%=method%>">
+              <button type="submit" onClick="<%=onClick%>" style="color:<%= color %>">&#9733;</button>
+            </form>
+
+        </td>
+   	 	</tr>
+	<% } }%>
+</table>

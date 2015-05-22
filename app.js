@@ -35,17 +35,27 @@ app.use(function(req, res, next){
     if(req.session.user){
         var timeF = new Date().getTime();
         if(timeF > req.session.user.tiempo+120000){
-           delete req.session.user;
-           res.redirect('/login');
+            delete req.session.user;
+            res.redirect('/login');
        }
        if(req.session.user){
         req.session.user.tiempo=timeF;
        }
-    }   
+    } 
     next();
+    /**if(req.session.user){
+        if(req.session.user.hora){
+            if((new Date() - new Date(req.session.user.hora)) > 3000){
+                delete req.session.user;
+                res.redirect('/login');
+                next ();
+                return;
+            } 
+        }
+        req.session.user.hora = new Date();
+    }
+    next();**/
 });
-
-
 
 //Helpers dinamicos
 app.use(function(req, res, next){
@@ -63,9 +73,9 @@ app.use(function(req, res, next){
     next();
 });
 
+
+
 app.use('/', routes);
-
-
 
 
 // catch 404 and forward to error handler

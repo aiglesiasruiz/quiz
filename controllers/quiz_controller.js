@@ -66,17 +66,88 @@ exports.index = function(req, res){
   if(req.user){
     options.where = {UserId: req.user.id}
   }
-  
-  if(req.query.busqueda===undefined){
-    models.Quiz.findAll(options).then(
-      function(quizes) {
-      res.render('quizes/index.ejs', {quizes: quizes, errors: []});
-     }).catch (function (error) { next(error)});
-   }else{var palabra =req.query.busqueda;
-      models.Quiz.findAll({ where: ["pregunta like ?", '%'+palabra+'%'] }).then(function(quizes) {
-        res.render('quizes/index.ejs', {quizes: quizes, errors: []});
-        }).catch (function (error) { next(error)});
+  if(req.session.user){
+    var lista = [];
+    if(req.query.busqueda===undefined){
+      models.Favourites.findAll({where:{UserId: Number(req.session.user.id)}}).then(function(favs){
+      var quizid;
+      console.log("Tamaño favs "+favs.length);
+      console.log("Tamaño de lista es (deberia ser 0) "+lista.length);
+
+      if(favs.length === 0){
+        models.Quiz.findAll(options).then(
+            function(quizes) {
+              res.render('quizes/index.ejs', {quizes: quizes, favs: lista, errors: []});
+          }).catch (function (error) { next(error)});
+        return;
+      }else{
+
+      for (var i=0; i<favs.length; i++){
+        console.log(" ENTRO EN EL FOOR");
+        quizid=favs[i].QuizId;
+        console.log("FUNCIONA LA ASIGNACION "+quizid);
+        models.Quiz.findAll({ where: { id: [quizid] } }).then(function(quiz){
+          console.log("LA PREGUNTAAA ES  "+ quiz[0].pregunta);
+          lista.push(quiz[0]);
+          console.log("La longitud de lista es "+lista.length);
+          if(lista.length === favs.length){
+           models.Quiz.findAll(options).then(
+            function(quizes) {
+              res.render('quizes/index.ejs', {quizes: quizes, favs: lista, errors: []});
+          }).catch (function (error) { next(error)});
+        }
+        });
+      }}
+    }).catch (function (error) { next(error)});
+   
+
+
+
+    }else{
+      var palabra =req.query.busqueda;
+      models.Favourites.findAll({where:{UserId: Number(req.session.user.id)}}).then(function(favs){
+      var quizid;
+      console.log("Tamaño favs "+favs.length);
+      console.log("Tamaño de lista es (deberia ser 0) "+lista.length);
+    
+      if(favs.length === 0){
+         models.Quiz.findAll({ where: ["pregunta like ?", '%'+palabra+'%'] }).then(function(quizes) {
+                res.render('quizes/index.ejs', {favs: lista, quizes: quizes, errors: []});
+          }).catch (function (error) { next(error)});
+        return;
+      }else{
+
+
+      for (var i=0; i<favs.length; i++){
+        console.log(" ENTRO EN EL FOOR");
+        quizid=favs[i].QuizId;
+        console.log("FUNCIONA LA ASIGNACION "+quizid);
+        models.Quiz.findAll({ where: { id: [quizid] } }).then(function(quiz){
+          console.log("LA PREGUNTAAA ES  "+ quiz[0].pregunta);
+          lista.push(quiz[0]);
+          console.log("La longitud de lista es "+lista.length);
+          if(lista.length === favs.length){
+          models.Quiz.findAll({ where: ["pregunta like ?", '%'+palabra+'%'] }).then(function(quizes) {
+                res.render('quizes/index.ejs', {favs: lista, quizes: quizes, errors: []});
+          }).catch (function (error) { next(error)});
+        }
+        });
+      }}
+    }).catch (function (error) { next(error)});
     }
+  }else {
+    if(req.query.busqueda===undefined){
+      models.Quiz.findAll(options).then(
+        function(quizes) {
+        res.render('quizes/index.ejs', {quizes: quizes, favs: lista, errors: []});
+      }).catch (function (error) { next(error)});
+    }else {
+      var palabra =req.query.busqueda;
+      models.Quiz.findAll({ where: ["pregunta like ?", '%'+palabra+'%'] }).then(function(quizes) {
+        res.render('quizes/index.ejs', {quizes: quizes, favs: lista, errors: []});
+      }).catch (function (error) { next(error)});
+    }
+  }
 };
 
 

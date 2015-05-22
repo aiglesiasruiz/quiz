@@ -40,6 +40,7 @@ var user_path = path.join(__dirname,'user');
 var User = sequelize.import(user_path);
 
 
+
 //los comentarios pertenecen a un quiz
 Comment.belongsTo(Quiz);
 Quiz.hasMany(Comment);
@@ -50,9 +51,16 @@ Quiz.belongsTo(User);
 User.hasMany(Quiz);
 
 
+//los favoritos pertenecen a usuario registrado
+Favourites = sequelize.define('Favourites');
+User.belongsToMany(Quiz, {through: 'Favourites'});
+Quiz.belongsToMany(User, {through: 'Favourites'});
+
+
 exports.Quiz = Quiz;//exportar definicion de tabla Quiz
 exports.Comment = Comment;//Eportar def de tabla comment
 exports.User = User;// exportar def de tabla user
+exports.Favourites = Favourites; //exportar tabla favoritos
 
 
 //sequelize.sync() crea e inicializa tabla de preguntasen DB 
@@ -71,7 +79,8 @@ sequelize.sync().then(function() {
               [ {pregunta: 'Capital de Italia',   respuesta: 'Roma', UserId: 2}, // estos quizes pertenecen al usuario pepe (2)
                 {pregunta: 'Capital de Portugal', respuesta: 'Lisboa', UserId: 2}
               ]
-            ).then(function(){console.log('Base de datos (tabla quiz) inicializada')});
+            ).then(function(){
+              console.log('Base de datos (tabla quiz) inicializada')});
           };
         });
       });

@@ -10,11 +10,30 @@
       <p><img class="quiz_img" src="/media/<%= quiz.image %>"></p>
    <%}%>
 
-    <form method="get" action="/quizes/<%= quiz.id %>/answer">
+    
+      <form method="get" action="/quizes/<%= quiz.id %>/answer">
         Pregunta: <%= quiz.pregunta %><p>
         <input type="text" name="respuesta" value="Respuesta"/>
         <input type="submit" value="Enviar">
-    </form>
+      </form>
+    
+    <% if(session.user){ %>
+    <% if(favs.length==0){
+              var color = 'grey'; var method = "put"; var onClick = "";
+            }else{
+              for(var j=0; j<favs.length; j++){
+                if(favs[j].id === quiz.id){ 
+                  var color = 'orange'; var method = "delete";var onClick = "return confirm('Quitar favorito');";break; 
+                }    else { var color = 'grey'; var method = "put"; var onClick = ""; }
+              }}%>
+    
+      <form method="post" action="/user/<%= session.user.id %>/favourites/<%= quiz.id%>?_method=<%=method%>">
+        <button type="submit" onClick="<%=onClick%>" style="color:<%= color %>">&#9733;</button>
+      </form>
+    <% } %>
+
+
+
   
     <p><a href="/quizes/<%= quiz.id %>/comments/new"><button>Nuevo comentario</button></a></p>
 

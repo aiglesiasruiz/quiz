@@ -154,9 +154,44 @@ exports.index = function(req, res){
 
 //GET /quizes/:id
 exports.show = function(req, res){
+   
+
+  if(req.session.user){
+  var lista = [];
+  models.Favourites.findAll({where:{UserId: Number(req.session.user.id)}}).then(function(favs){
+    var quizid;
+    //console.log("Tamaño favs "+favs.length);
+    //console.log("Tamaño de lista es (deberia ser 0) "+lista.length);
+    
+    if(favs.length === 0){
+      models.Quiz.find(req.params.quizId).then(function(quiz) {
+            res.render('quizes/show', { favs: lista, quiz: req.quiz, errors: [] });
+      })
+      return;
+    }
+
+    for (var i=0; i<favs.length; i++){
+        //console.log(" ENTRO EN EL FOOR");
+        quizid=favs[i].QuizId;
+        //console.log("FUNCIONA LA ASIGNACION "+quizid);
+        models.Quiz.findAll({ where: { id: [quizid] } }).then(function(quiz){
+          //console.log("LA PREGUNTAAA ES  "+ quiz[0].pregunta);
+          lista.push(quiz[0]);
+          //console.log("La longitud de lista es "+lista.length);
+          if(lista.length === favs.length){
+          models.Quiz.find(req.params.quizId).then(function(quiz) {
+            res.render('quizes/show', { favs: lista, quiz: req.quiz, errors: [] });
+          })
+        }
+        });
+    }
+  }).catch (function (error) { next(error)});
+  
+  }else{
    models.Quiz.find(req.params.quizId).then(function(quiz) {
       res.render('quizes/show', { quiz: req.quiz, errors: [] });
    })
+  }
 };
 
 

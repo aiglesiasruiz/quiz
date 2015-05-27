@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req, res, next){    
     if(req.session.user){
         var timeF = new Date().getTime();
-        if(timeF > req.session.user.tiempo+3000){
+        if(timeF > req.session.user.tiempo+120000){
             delete req.session.user;
             res.redirect('/login');
        }

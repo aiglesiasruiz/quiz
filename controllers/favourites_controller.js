@@ -34,19 +34,20 @@ exports.destroy = function(req, res){
 	var user = req.user;
 	var id = user.id;
 	
-
 	user.hasQuiz(quiz).then(function(result){
 		if(result){
 			user.removeQuiz(quiz).then(function(){
 				user.hasQuiz(quiz).then(function(result){
 					console.log("el "+user.id+" quito de favorita "+quiz.id+" con exito");
-					res.redirect(req.get('referer'));
+					//res.redirect(req.get('referer'));
 				})
 			})
-		}else{res.redirect('/');}
-		console.log("ENTROOOO No LA TENIA COMO FAVORITA");
+		}//else{res.redirect('/');}
+		else{console.log("No LA TENIA COMO FAVORITA");}
+		
 
 	});
+	res.redirect(req.get('referer'));
 
 
 

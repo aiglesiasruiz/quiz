@@ -1,6 +1,7 @@
 exports.new = function(req, res) {
     var errors = req.session.errors || {};
     req.session.errors = {};
+    var parrafo = "";
 
     res.render('sessions/new', {errors: errors});
 };
